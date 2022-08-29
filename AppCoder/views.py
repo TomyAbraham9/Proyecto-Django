@@ -2,7 +2,7 @@ from http.client import HTTPResponse
 from django.shortcuts import render
 from .models import Curso , Familiares
 from django.http import HttpResponse
-from django.template import Context , Template , loader
+from django.template import loader
 
 
 # Create your views here.
@@ -26,20 +26,7 @@ def familiares(request):
     datos2=f" Nombre completo: {familiar_2.nombre} {familiar_2.apellido}. Edad: {familiar_2.edad}. Fecha de nacimiento: {familiar_2.nacimiento}."
     datos3=f" Nombre completo: {familiar_3.nombre} {familiar_3.apellido}. Edad: {familiar_3.edad}. Fecha de nacimiento: {familiar_3.nacimiento}."
     datos4=f" Nombre completo: {familiar_4.nombre} {familiar_4.apellido}. Edad: {familiar_4.edad}. Fecha de nacimiento: {familiar_4.nacimiento}."
-    diccionario=[datos1, datos2, datos3, datos4]
+    diccionario={"datos_1": datos1 , "datos_2": datos2 , "datos_3": datos3 , "datos_4": datos4}
     plantilla=loader.get_template("template2.html")
     texto=plantilla.render(diccionario)
     return HttpResponse(texto)
-
-
-
-
-
-
-
-
-
-
-
-
-    #texto=f"Datos de mi familia: \n {datos1}  {datos2}  {datos3}  {datos4}"
