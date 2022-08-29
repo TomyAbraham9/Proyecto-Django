@@ -21,3 +21,10 @@ class Entregable(models.Model):
     nombre= models.CharField(max_length=50)
     fecha_entrega= models.DateField()
     entregado= models.BooleanField()
+
+class Familiares(models.Model):
+    nombre= models.CharField(max_length=50)
+    apellido= models.CharField(max_length=50)
+    edad= models.IntegerField()
+    nacimiento= models.DateField()
+    
