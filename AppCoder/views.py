@@ -29,4 +29,22 @@ def familiares(request):
     diccionario={"datos_1": datos1 , "datos_2": datos2 , "datos_3": datos3 , "datos_4": datos4}
     plantilla=loader.get_template("template2.html")
     texto=plantilla.render(diccionario)
-    return HttpResponse(texto)
+    return HttpResponse("texto")
+
+
+def inicio(request):
+    return render (request, "AppCoder/inicio.html")
+
+def estudiantes(request):
+    return render (request, "AppCoder/estudiantes.html")
+
+def cursos(request):
+    return render (request, "AppCoder/cursos.html")
+
+def profesores(request):
+    return render (request, "AppCoder/profesores.html")
+
+def entregables(request):
+    return render (request, "AppCoder/entregables.html")
+
+

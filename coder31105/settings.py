@@ -55,7 +55,7 @@ ROOT_URLCONF = 'coder31105.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["C:/Users/Tomy/Desktop/Proyecto Actual/plantilla"],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
