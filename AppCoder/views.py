@@ -1,9 +1,9 @@
 from http.client import HTTPResponse
 from django.shortcuts import render
-from .models import Curso , Familiares
+from .models import Curso , Familiares , Profesor
 from django.http import HttpResponse
 from django.template import loader
-
+from AppCoder.forms import CursoForm, ProfeForm
 
 # Create your views here.
 
@@ -47,4 +47,61 @@ def profesores(request):
 def entregables(request):
     return render (request, "AppCoder/entregables.html")
 
+"""def cursoFormulario(request):
+    if request.method=="POST":
+        nombre=request.POST["nombre"]
+        comision=request.POST["comision"]
+        curso=Curso(nombre=nombre, comision=comision)
+        curso.save()
+        return render (request, "AppCoder/inicio.html")
+    else:
+        return render (request, "AppCoder/cursoFormulario.html")
+"""
+
+def cursos(request):
+    if request.method == "POST":
+        form=CursoForm(request.POST)
+        if form.is_valid():
+            informacion=form.cleaned_data
+            nombre=informacion["nombre"]
+            comision=informacion["comision"]
+            curso=Curso(nombre=nombre , comision=comision)
+            curso.save()
+            return render (request, "AppCoder/inicio.html")
+
+
+    else:
+        formulario=CursoForm()
+        return render (request, "AppCoder/cursos.html" , {"formulario": formulario})
+
+
+def profesores(request):
+    if request.method == "POST":
+        form=ProfeForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            nombre=info["nombre"]
+            apellido=info["apellido"]
+            email=info["email"]
+            profesion=info["profesion"]
+            profe = Profesor(nombre=nombre , apellido=apellido , email=email , profesion=profesion)
+            profe.save()
+            return render (request, "AppCoder/inicio.html")
+
+    else:
+        form= ProfeForm()
+        return render (request, "AppCoder/profesores.html", {"formulario":form})
+
+def busquedaComision(request):
+    return render (request, "AppCoder/busquedaComision.html")
+
+def buscar(request):
+
+    if request.GET["comision"]:
+        comision=request.GET["comision"]
+        cursos=Curso.objects.filter(comision=comision)
+        return render (request, "AppCoder/resultadosBusqueda.html", {"cursos":cursos})
+
+    else:
+        return render (request, "AppCoder/busquedaComision.html", {"mensaje":"Ingrese una comision"})
 
