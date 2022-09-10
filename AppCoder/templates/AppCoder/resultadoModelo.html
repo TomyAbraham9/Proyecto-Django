@@ -1,0 +1,30 @@
+{% extends "AppCoder/padre.html" %}
+
+{% load static %}
+
+{% block titulo %}
+<h1 class="mb-5">RESULTADOS DE LA BUSQUEDA!</h1>
+{% endblock %}
+
+
+{% block contenido %}
+<h1>BUSQUEDA DE MODELOS</h1>
+
+{% if modelos %}
+
+<ul>
+    {% for modelo in modelos %}
+    <li>{{ vehiculo.tipo }}</li>
+    <li>{{ vehiculo.marca }}</li>
+    <li>{{ vehiculo.modelo }}</li>
+    <br>
+    {% endfor %}
+</ul>
+
+{% else %}
+
+<p>NO SE ENCONTRARON VEHICULOS</p>
+
+{% endif %}
+
+{% endblock %}

@@ -1,9 +1,9 @@
 from http.client import HTTPResponse
 from django.shortcuts import render
-from .models import Curso , Familiares , Profesor
+from .models import Curso , Familiares, Mascotas , Profesor, Vehiculo, Vestimenta
 from django.http import HttpResponse
 from django.template import loader
-from AppCoder.forms import CursoForm, ProfeForm
+from AppCoder.forms import CursoForm, ProfeForm, VehiculoForm, VestimentaForm, MascotaForm
 
 # Create your views here.
 
@@ -86,14 +86,14 @@ def profesores(request):
             profesion=info["profesion"]
             profe = Profesor(nombre=nombre , apellido=apellido , email=email , profesion=profesion)
             profe.save()
-            return render (request, "AppCoder/inicio.html")
+            return render(request, "AppCoder/inicio.html")
 
     else:
         form= ProfeForm()
-        return render (request, "AppCoder/profesores.html", {"formulario":form})
+        return render(request, "AppCoder/profesores.html", {"formulario":form})
 
 def busquedaComision(request):
-    return render (request, "AppCoder/busquedaComision.html")
+    return render(request, "AppCoder/busquedaComision.html")
 
 def buscar(request):
 
@@ -104,4 +104,61 @@ def buscar(request):
 
     else:
         return render (request, "AppCoder/busquedaComision.html", {"mensaje":"Ingrese una comision"})
+
+
+def vehiculos(request):
+    if request.method == "POST":
+        form=VehiculoForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            tipo=info["tipo"]
+            marca=info["marca"]
+            modelo=info["modelo"]
+            vehiculo = Vehiculo(tipo=tipo , marca=marca , modelo=modelo)
+            vehiculo.save()
+            return render(request, "AppCoder/inicio.html")
+
+    else:
+        form= VehiculoForm()
+        return render (request, "AppCoder/vehiculos.html", {"formulario":form})
+
+def mascotas(request):
+    if request.method == "POST":
+        form=MascotaForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            nombre=info["nombre"]
+            tipo=info["tipo"]
+            edad=info["edad"]
+            mascota = Mascotas(nombre=nombre , tipo=tipo , edad=edad)
+            mascota.save()
+            return render(request, "AppCoder/inicio.html")
+
+    else:
+        form= MascotaForm()
+        return render (request, "AppCoder/mascotas.html", {"formulario":form})
+
+def vestimenta(request):
+    if request.method == "POST":
+        form=VestimentaForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            tipo=info["tipo"]
+            material=info["material"]
+            marca=info["marca"]
+            vestimenta = Vestimenta(tipo=tipo , material=material , marca=marca)
+            vestimenta.save()
+            return render(request, "AppCoder/inicio.html")
+
+    else:
+        form= VestimentaForm()
+        return render (request, "AppCoder/vestimenta.html", {"formulario":form})
+
+def busquedaModelo(request):
+    return render(request, "AppCoder/busquedaModelo.html")
+
+def busqueda(request):
+    modelo=request.GET["modelo"]
+    modelos=vehiculos.objects.filter(modelo=modelo)
+    return render(request, "AppCoder/resultadoModelo.html" , {"modelos":modelos})
 

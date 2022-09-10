@@ -36,4 +36,28 @@ class Familiares(models.Model):
     apellido= models.CharField(max_length=50)
     edad= models.IntegerField()
     nacimiento= models.DateField()
-    
+
+class Mascotas(models.Model):
+    nombre= models.CharField(max_length=50)
+    tipo= models.CharField(max_length=50)
+    edad= models.IntegerField()
+
+    def __str__(self):
+        return self.nombre+" "+self.tipo
+
+class Vehiculo(models.Model):
+    tipo= models.CharField(max_length=50)
+    marca= models.CharField(max_length=50)
+    modelo= models.IntegerField()
+
+    def __str__(self):
+        return self.marca+" "+self.modelo
+
+class Vestimenta(models.Model):
+    tipo= models.CharField(max_length=50)
+    material= models.CharField(max_length=50)
+    marca= models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.tipo+" "+self.marca
+
