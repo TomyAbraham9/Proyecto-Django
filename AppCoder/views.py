@@ -159,6 +159,6 @@ def busquedaModelo(request):
 
 def busqueda(request):
     modelo=request.GET["modelo"]
-    modelos=vehiculos.objects.filter(modelo=modelo)
+    modelos=Vehiculo.objects.filter(modelo=modelo)
     return render(request, "AppCoder/resultadoModelo.html" , {"modelos":modelos})
 

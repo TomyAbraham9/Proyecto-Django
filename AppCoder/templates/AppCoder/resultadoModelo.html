@@ -13,11 +13,12 @@
 {% if modelos %}
 
 <ul>
-    {% for modelo in modelos %}
-    <li>{{ vehiculo.tipo }}</li>
-    <li>{{ vehiculo.marca }}</li>
-    <li>{{ vehiculo.modelo }}</li>
-    <br>
+    {% for vehiculo in modelos %}
+<ul>
+--->{{vehiculo.marca}}
+
+    {{vehiculo.modelo}}
+</ul>
     {% endfor %}
 </ul>
 

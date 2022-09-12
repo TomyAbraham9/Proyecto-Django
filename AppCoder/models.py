@@ -7,7 +7,7 @@ class Curso(models.Model):
     comision= models.IntegerField()
 
     def __str__(self):
-        return self.nombre+" "+str(self.comision)
+        return f'{self.nombre} {self.comision}'
 
 class Estudiante(models.Model):
     nombre= models.CharField(max_length=50)
@@ -15,7 +15,7 @@ class Estudiante(models.Model):
     email= models.EmailField()
 
     def __str__(self):
-        return self.nombre+" "+self.apellido
+        return f'{self.nombre} {self.apellido}'
 
 class Profesor(models.Model):
     nombre= models.CharField(max_length=50)
@@ -24,12 +24,16 @@ class Profesor(models.Model):
     profesion= models.CharField(max_length=50)
 
     def __str__(self):
-        return self.nombre+" "+self.apellido
+        return f'{self.nombre} {self.apellido}'
+
 
 class Entregable(models.Model):
     nombre= models.CharField(max_length=50)
     fecha_entrega= models.DateField()
     entregado= models.BooleanField()
+
+    def __str__(self):
+        return f'{self.nombre} {self.entregado}'
 
 class Familiares(models.Model):
     nombre= models.CharField(max_length=50)
@@ -37,13 +41,16 @@ class Familiares(models.Model):
     edad= models.IntegerField()
     nacimiento= models.DateField()
 
+    def __str__(self):
+        return f'{self.nombre} {self.apellido}'
+
 class Mascotas(models.Model):
     nombre= models.CharField(max_length=50)
     tipo= models.CharField(max_length=50)
     edad= models.IntegerField()
 
     def __str__(self):
-        return self.nombre+" "+self.tipo
+        return f'{self.nombre} {self.tipo}'
 
 class Vehiculo(models.Model):
     tipo= models.CharField(max_length=50)
@@ -51,7 +58,7 @@ class Vehiculo(models.Model):
     modelo= models.IntegerField()
 
     def __str__(self):
-        return self.marca+" "+self.modelo
+        return f'{self.marca} {self.modelo}'
 
 class Vestimenta(models.Model):
     tipo= models.CharField(max_length=50)
@@ -59,5 +66,5 @@ class Vestimenta(models.Model):
     marca= models.CharField(max_length=50)
 
     def __str__(self):
-        return self.tipo+" "+self.marca
+        return f'{self.tipo} {self.marca}'
 
