@@ -1,0 +1,17 @@
+{% extends "AppCoder/padre.html" %}
+
+{% load static %}
+
+{% block titulo %}
+<h1 class="mb-5">FORMULARIO DE ESTUDIANTE!</h1>
+{% endblock %}
+
+
+{% block contenido %}
+
+<form method="POST"> {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Guardar">
+
+</form>
+{% endblock %}

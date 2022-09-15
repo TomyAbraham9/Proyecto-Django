@@ -1,0 +1,17 @@
+{% extends "AppCoder/padre.html" %}
+
+{% load static %}
+
+{% block titulo %}
+<h1 class="mb-5">FORMULARIO DE ESTUDIANTE!</h1>
+{% endblock %}
+
+
+{% block contenido %}
+
+<form method="POST"> {% csrf_token %}
+    Estas seguro que deseas eliminar el estudiante "{{ object }}"?
+    <input type="submit" value="SI">
+
+</form>
+{% endblock %}
