@@ -3,9 +3,17 @@ from django.shortcuts import render
 from .models import Curso, Estudiante , Familiares, Mascotas , Profesor, Vehiculo, Vestimenta
 from django.http import HttpResponse
 from django.template import loader
-from AppCoder.forms import CursoForm, ProfeForm, VehiculoForm, VestimentaForm, MascotaForm
+from AppCoder.forms import CursoForm, ProfeForm, VehiculoForm, VestimentaForm, MascotaForm, UserRegisterForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+
+
+
+
 
 # Create your views here.
 
@@ -33,7 +41,7 @@ def familiares(request):
     texto=plantilla.render(diccionario)
     return HttpResponse("texto")
 
-
+@login_required
 def inicio(request):
     return render (request, "AppCoder/inicio.html")
 
@@ -165,6 +173,7 @@ def busqueda(request):
     modelos=Vehiculo.objects.filter(modelo=modelo)
     return render(request, "AppCoder/resultadoModelo.html" , {"modelos":modelos})
 
+@login_required
 def leerProfesores(request):
     profesores=Profesor.objects.all()
     return render(request, "AppCoder/leerProfesores.html", {"profesores":profesores})
@@ -194,11 +203,11 @@ def editarProfesor(request, id):
 
 ####### VBC #############
 
-class EstudianteList(ListView):
+class EstudianteList(LoginRequiredMixin, ListView):
     model=Estudiante
     template_name="AppCoder/leerEstudiantes.html"
 
-class EstudianteDetalle(DetailView):
+class EstudianteDetalle(LoginRequiredMixin, DetailView):
     model=Estudiante
     template_name="AppCoder/estudiante_detalle.html"
 
@@ -215,5 +224,49 @@ class EstudianteUpdate(UpdateView):
 class EstudianteDelete(DeleteView):
     model= Estudiante
     success_url= reverse_lazy("estudiante_listar")
+
+
+### login, logout, register ###
+
+def login_request(request):
+    if request.method == "POST":
+        form=AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            usu=request.POST["username"]
+            clave=request.POST["password"]
+            
+            usuario=authenticate(username=usu, password=clave)
+            if usuario is not None:
+                login(request, usuario)
+                return render(request, "AppCoder/inicio.html", {"mensaje": f"Bienvenido {usuario}"})
+            else:
+                return render(request, "AppCoder/login.html", {"formulario":form, "mensaje":"Usuario o contraseña incorrectos"})
+        else:
+            return render(request, "AppCoder/login.html", {"formulario":form, "mensaje":"Usuario o contraseña incorrectos"})
+    else:
+        form=AuthenticationForm()
+        return render(request, "AppCoder/login.html", {"formulario":form})
+
+def register(request):
+    if request.method=="POST":
+        form=UserRegisterForm(request.POST)
+        if form.is_valid():
+            username=form.cleaned_data.get("username")
+            form.save()
+            return render(request, "AppCoder/inicio.html", {"mensaje":f"Usuario {username} creado correctamente"})
+
+        else:
+            return render (request, "AppCoder/register.html", {"formulario":form, "mensaje":"FORMULARIO INVALIDO"})
+
+    else:
+        form = UserRegisterForm()
+        return render(request, "AppCoder/register.html", {"formulario":form})
+
+
+
+
+
+
+
 
 
