@@ -31,6 +31,8 @@
                 <a class="btn btn-warning" href="{% url 'mascotas' %}">MASCOTAS</a>
                 <a class="btn btn-primary" href="{% url 'vestimenta' %}">VESTIMENTA</a>
                 {% if user.is_authenticated %}
+                <h4>Hola {{ user.username }}</h4>
+                <img height="50px" src="{{ avatar }}" alt="">
                 <a class="btn btn-success" href="{% url 'logout' %}">CERRAR SESION</a>
                 {% else %}
                 <a class="btn btn-success" href="{% url 'login' %}">LOGUEATE</a>

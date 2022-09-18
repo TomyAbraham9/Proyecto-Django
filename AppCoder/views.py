@@ -1,9 +1,9 @@
 from http.client import HTTPResponse
 from django.shortcuts import render
-from .models import Curso, Estudiante , Familiares, Mascotas , Profesor, Vehiculo, Vestimenta
+from .models import Avatar, Curso, Estudiante , Familiares, Mascotas , Profesor, Vehiculo, Vestimenta, Avatar
 from django.http import HttpResponse
 from django.template import loader
-from AppCoder.forms import CursoForm, ProfeForm, VehiculoForm, VestimentaForm, MascotaForm, UserRegisterForm
+from AppCoder.forms import CursoForm, ProfeForm, VehiculoForm, VestimentaForm, MascotaForm, UserRegisterForm, UserEditForm, AvatarForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
@@ -39,34 +39,25 @@ def familiares(request):
     diccionario={"datos_1": datos1 , "datos_2": datos2 , "datos_3": datos3 , "datos_4": datos4}
     plantilla=loader.get_template("template2.html")
     texto=plantilla.render(diccionario)
-    return HttpResponse("texto")
+    return HttpResponse(texto)
 
 @login_required
 def inicio(request):
-    return render (request, "AppCoder/inicio.html")
+
+    return render (request, "AppCoder/inicio.html", {"avatar":obtenerAvatar(request)})
 
 def estudiantes(request):
-    return render (request, "AppCoder/estudiantes.html")
+    return render (request, "AppCoder/estudiantes.html", {"avatar":obtenerAvatar(request)})
 
 def cursos(request):
-    return render (request, "AppCoder/cursos.html")
+    return render (request, "AppCoder/cursos.html", {"avatar":obtenerAvatar(request)})
 
 def profesores(request):
-    return render (request, "AppCoder/profesores.html")
+    return render (request, "AppCoder/profesores.html", {"avatar":obtenerAvatar(request)})
 
 def entregables(request):
-    return render (request, "AppCoder/entregables.html")
+    return render (request, "AppCoder/entregables.html", {"avatar":obtenerAvatar(request)})
 
-"""def cursoFormulario(request):
-    if request.method=="POST":
-        nombre=request.POST["nombre"]
-        comision=request.POST["comision"]
-        curso=Curso(nombre=nombre, comision=comision)
-        curso.save()
-        return render (request, "AppCoder/inicio.html")
-    else:
-        return render (request, "AppCoder/cursoFormulario.html")
-"""
 
 def cursos(request):
     if request.method == "POST":
@@ -82,7 +73,7 @@ def cursos(request):
 
     else:
         formulario=CursoForm()
-        return render (request, "AppCoder/cursos.html" , {"formulario": formulario})
+        return render (request, "AppCoder/cursos.html" , {"formulario": formulario, "avatar":obtenerAvatar(request)})
 
 
 def profesores(request):
@@ -101,10 +92,10 @@ def profesores(request):
 
     else:
         form= ProfeForm()
-        return render(request, "AppCoder/profesores.html", {"formulario":form})
+        return render(request, "AppCoder/profesores.html", {"formulario":form, "avatar":obtenerAvatar(request)})
 
 def busquedaComision(request):
-    return render(request, "AppCoder/busquedaComision.html")
+    return render(request, "AppCoder/busquedaComision.html", {"avatar":obtenerAvatar(request)})
 
 def buscar(request):
 
@@ -114,7 +105,7 @@ def buscar(request):
         return render (request, "AppCoder/resultadosBusqueda.html", {"cursos":cursos})
 
     else:
-        return render (request, "AppCoder/busquedaComision.html", {"mensaje":"Ingrese una comision"})
+        return render (request, "AppCoder/busquedaComision.html", {"mensaje":"Ingrese una comision", "avatar":obtenerAvatar(request)})
 
 
 def vehiculos(request):
@@ -131,7 +122,7 @@ def vehiculos(request):
 
     else:
         form= VehiculoForm()
-        return render (request, "AppCoder/vehiculos.html", {"formulario":form})
+        return render (request, "AppCoder/vehiculos.html", {"formulario":form, "avatar":obtenerAvatar(request)})
 
 def mascotas(request):
     if request.method == "POST":
@@ -147,7 +138,7 @@ def mascotas(request):
 
     else:
         form= MascotaForm()
-        return render (request, "AppCoder/mascotas.html", {"formulario":form})
+        return render (request, "AppCoder/mascotas.html", {"formulario":form,"avatar":obtenerAvatar(request)})
 
 def vestimenta(request):
     if request.method == "POST":
@@ -163,26 +154,26 @@ def vestimenta(request):
 
     else:
         form= VestimentaForm()
-        return render (request, "AppCoder/vestimenta.html", {"formulario":form})
+        return render (request, "AppCoder/vestimenta.html", {"formulario":form, "avatar":obtenerAvatar(request)})
 
 def busquedaModelo(request):
-    return render(request, "AppCoder/busquedaModelo.html")
+    return render(request, "AppCoder/busquedaModelo.html", {"avatar":obtenerAvatar(request)})
 
 def busqueda(request):
     modelo=request.GET["modelo"]
     modelos=Vehiculo.objects.filter(modelo=modelo)
-    return render(request, "AppCoder/resultadoModelo.html" , {"modelos":modelos})
+    return render(request, "AppCoder/resultadoModelo.html" , {"modelos":modelos, "avatar":obtenerAvatar(request)})
 
 @login_required
 def leerProfesores(request):
     profesores=Profesor.objects.all()
-    return render(request, "AppCoder/leerProfesores.html", {"profesores":profesores})
+    return render(request, "AppCoder/leerProfesores.html", {"profesores":profesores, "avatar":obtenerAvatar(request)})
 
 def eliminarProfesor(request, id):
     profesor=Profesor.objects.get(id=id)
     profesor.delete()
     profesores=Profesor.objects.all()
-    return render(request, "AppCoder/leerProfesores.html", {"profesores":profesores})
+    return render(request, "AppCoder/leerProfesores.html", {"profesores":profesores, "avatar":obtenerAvatar(request)})
 
 def editarProfesor(request, id):
     profesor=Profesor.objects.get(id=id)
@@ -199,7 +190,7 @@ def editarProfesor(request, id):
             return render(request, "AppCoder/leerProfesores.html", {"profesores":profesores})
     else:
         form= ProfeForm(initial={"nombre":profesor.nombre, "apellido":profesor.apellido, "email":profesor.email, "profesion":profesor.profesion})
-        return render(request, "AppCoder/editarProfesor.html", {"formulario":form, "profesor":profesor})
+        return render(request, "AppCoder/editarProfesor.html", {"formulario":form, "profesor":profesor, "avatar":obtenerAvatar(request)})
 
 ####### VBC #############
 
@@ -238,7 +229,7 @@ def login_request(request):
             usuario=authenticate(username=usu, password=clave)
             if usuario is not None:
                 login(request, usuario)
-                return render(request, "AppCoder/inicio.html", {"mensaje": f"Bienvenido {usuario}"})
+                return render(request, "AppCoder/inicio.html", {"mensaje": f"Bienvenido {usuario}", "avatar":obtenerAvatar(request)})
             else:
                 return render(request, "AppCoder/login.html", {"formulario":form, "mensaje":"Usuario o contraseña incorrectos"})
         else:
@@ -263,10 +254,49 @@ def register(request):
         return render(request, "AppCoder/register.html", {"formulario":form})
 
 
+@login_required
+def editarPerfil(request):
+    usuario=request.user
+    if request.method=="POST":
+        form=UserEditForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            usuario.email=info["email"]
+            usuario.password1=info["password1"]
+            usuario.password2=info["password2"]
+            usuario.first_name=info["first_name"]
+            usuario.last_name=info["last_name"]
+            usuario.save()
+            return render(request, "AppCoder/inicio.html", {"mensaje":"Perfil editado correctamente"})
+        else:
+            return render(request, "AppCoder/editarPerfil.html", {"formulario":form, "usuario":usuario, "mensaje":"FORMULARIO INVALIDO"})
+    else:
+        form=UserEditForm(instance=usuario)
+    return render(request, "AppCoder/editarPerfil.html", {"formulario":form, "usuario":usuario, "avatar":obtenerAvatar(request)})
+    
+@login_required
+def agregarAvatar(request):
+    if request.method=="POST":
+        formulario=AvatarForm(request.POST, request.FILES)
+        if formulario.is_valid():
+            avatarViejo=Avatar.objects.filter(user=request.user)
+            if len(avatarViejo)>0:
+                avatarViejo[0].delete()
+            avatar=Avatar(user=request.user, imagen=formulario.cleaned_data["imagen"])
+            avatar.save()
+            return render(request, "AppCoder/inicio.html", {"usuario":request.user, "mensaje": "AVATAR AGREGADO EXITOSAMENTE", "imagen":avatar.imagen.url})
+        else:
+            return render(request, "AppCoder/agregarAvatar.html", {"formulario":formulario, "mensaje":"FORMULARIO INVALIDO"})    
+    else:
+        formulario=AvatarForm()
+        return render(request, "AppCoder/agregarAvatar.html", {"formulario":formulario, "usuario":request.user})
 
 
-
-
-
-
+def obtenerAvatar(request):
+    lista=Avatar.objects.filter(user=request.user)
+    if len(lista)!= 0:
+        imagen=lista[0].imagen.url
+    else:
+        imagen=""
+    return imagen
 
